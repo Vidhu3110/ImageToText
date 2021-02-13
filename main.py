@@ -1,5 +1,5 @@
-    #%%
-def background():
+#%%
+def background(filepath):
     import cv2
     import numpy as np
     import pytesseract
@@ -22,7 +22,7 @@ def background():
     from textblob import TextBlob
     from matplotlib import pyplot as plt
     #%%
-    img = cv2.imread('/home/user/Desktop/image to text/single_column_text.png')
+    img = cv2.imread(filepath)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     pytesseract
     #%%
@@ -159,7 +159,6 @@ def background():
         translate_text = translator.translate(i,lang_tgt='hi')  
         print(translate_text)
 
-    #%%
     ltranswordshindi=[]
     ltranswordstamil=[]
     ltranswordstelugu=[]
@@ -173,9 +172,11 @@ def background():
         translate_text=translator.translate(i,lang_tgt="ta")    
         ltranswordstamil.append(translate_text)  
 
-    # %%
+
     d = {'words':l , "hindi":ltranswordshindi , "punjabi":ltranswordspunjabi , "tamil" : ltranswordstamil}
     x = pd.DataFrame.from_dict(d)
-    # %%
+
     x.to_csv("output.csv")
-    # %%
+
+
+# %%
