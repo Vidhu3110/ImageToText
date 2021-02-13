@@ -4,10 +4,24 @@ import numpy as np
 import pytesseract
 from pytesseract.pytesseract import Output
 # %matplotlib inline
+import numpy as np
+import pandas as pd 
+import os
+import re
+import itertools
+import nltk
+import seaborn as sns
+from sklearn.linear_model import LogisticRegression
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer 
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from textblob import TextBlob
 
+from textblob import TextBlob
 from matplotlib import pyplot as plt
 #%%
-img = cv2.imread('/home/user/Desktop/image to text/NJM1Z.png')
+img = cv2.imread('/home/user/Desktop/image to text/single_column_text.png')
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 pytesseract
 #%%
@@ -97,31 +111,17 @@ cv2.imshow('Image Sharpening',sharpened)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 # pytesseract.image_to_string(img)
+
 #%%
-import numpy as np
-import pandas as pd 
-import os
-import re
-import itertools
-import nltk
-import seaborn as sns
-from sklearn.linear_model import LogisticRegression
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-from nltk.stem import WordNetLemmatizer 
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split
-from textblob import TextBlob
-from sklearn import svm
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import confusion_matrix, classification_report,accuracy_score,f1_score
-from textblob import TextBlob
+# data = pd.read_csv('words.txt')
+# data.to_csv('words.csv')
+#%%
+
+#%%
 def text_processing(tweet):
     
     def form_sentence(tweet):
-        tweet_blob = TextBlob(tweet)
+        tweet_blob = TextBlob(tweet.lower())
         return ' '.join(tweet_blob.words)
     new_tweet = form_sentence(tweet)
     
@@ -148,11 +148,15 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-set(var)
-
+#%%
+data1 = pd.read_csv('words.csv')
+var1 = []
+for i in range(len(data1)):
+    if data1["WORDS"][i] in var:
+        print(var)
 
 #%%
-pip install google_trans_new
+# pip install google_trans_new
 
 from google_trans_new import google_translator  
   
