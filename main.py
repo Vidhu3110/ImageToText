@@ -18,10 +18,6 @@ def background(filepath):
     from nltk.stem import WordNetLemmatizer 
     from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
     from textblob import TextBlob
-
-    from textblob import TextBlob
-    from matplotlib import pyplot as plt
-    #%%
     img = cv2.imread(filepath)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     pytesseract
@@ -33,7 +29,7 @@ def background(filepath):
     # noise removal
     def remove_noise(image):
         return cv2.medianBlur(image,5)
-    
+
     #thresholding
     def thresholding(image):
         return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
@@ -80,9 +76,9 @@ def background(filepath):
                                 [-1, 9,-1],
                                 [-1,-1,-1]])
     sharpened = cv2.filter2D(img, -1, kernel_sharpening)
-    cv2.imshow('Image Sharpening', sharpened)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('Image Sharpening', sharpened)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     #%%
 
     gray = get_grayscale(img)
@@ -90,7 +86,7 @@ def background(filepath):
     open = opening(gray)
     can = canny(gray)
     ero = erode(gray)
-    print(pytesseract.image_to_string(img))
+    # print(pytesseract.image_to_string(img))
 
 
     #%%
@@ -99,7 +95,7 @@ def background(filepath):
     conf = "-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6"
     boxes = pytesseract.image_to_data(img)
     for a,b in enumerate(boxes.splitlines()):
-            print(b)
+            # print(b)
             if a!=0:
                 b = b.split()
                 if len(b)==12:
@@ -107,9 +103,9 @@ def background(filepath):
                     cv2.rectangle(sharpened, (x,y), (x+w, y+h), (50, 50, 255), 2)
                     hImg, wImg,_ = img.shape
     #%%
-    cv2.imshow('Image Sharpening',sharpened)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('Image Sharpening',sharpened)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     #%%
     def text_processing(tweet):
@@ -138,45 +134,74 @@ def background(filepath):
 
     var=text_processing(pytesseract.image_to_string(img))
 
-    nltk.download('punkt')
-    nltk.download('stopwords')
-    nltk.download('wordnet')
+    # nltk.download('punkt')
+    # nltk.download('stopwords')
+    # nltk.download('wordnet')
 
     #%%
     data1 = pd.read_csv('words.csv')
     l = []
     for i in data1['WORDS']:
         if i in var:
-            print(i)
+            # print(i)
             l.append(i)
     #%%
     # pip install google_trans_new
 
     from google_trans_new import google_translator  
-    
-    translator = google_translator()  
-    for i in l:
-        translate_text = translator.translate(i,lang_tgt='hi')  
-        print(translate_text)
 
-    ltranswordshindi=[]
-    ltranswordstamil=[]
-    ltranswordstelugu=[]
-    ltranswordspunjabi=[]
+    transwordshindi=[]
+    transwordstamil=[]
+    transwordstelugu=[]
+    transwordspunjabi=[]
     translator=google_translator()
     for i in l:
         translate_text=translator.translate(i,lang_tgt="hi")    
-        ltranswordshindi.append(translate_text)
+        transwordshindi.append(translate_text)
         translate_text=translator.translate(i,lang_tgt="pa")    
-        ltranswordspunjabi.append(translate_text)  
+        transwordspunjabi.append(translate_text)  
         translate_text=translator.translate(i,lang_tgt="ta")    
-        ltranswordstamil.append(translate_text)  
+        transwordstamil.append(translate_text)  
 
 
-    d = {'words':l , "hindi":ltranswordshindi , "punjabi":ltranswordspunjabi , "tamil" : ltranswordstamil}
-    x = pd.DataFrame.from_dict(d)
+    # d = {'words':l , "hindi":transwordshindi , "punjabi":transwordspunjabi , "tamil" : transwordstamil}
+    # x = pd.DataFrame.from_dict(d)
 
-    x.to_csv("output.csv")
+    # x.to_csv("output.csv")
 
 
+    # %%
+    from openpyxl import Workbook
+    workbook = Workbook()
+    sheet= workbook.active
+    sheet["A1"] = "WORDS"
+    sheet["B1"] = "HINDI"
+    sheet["C1"] = "PUNJABI"
+    sheet["D1"] = "TAMIL"
+
+    workbook.save(filename="OUTPUT.xlsx")
+
+
+    # %%
+    lwords=[]
+    j=2
+    for i in range(len(l)):
+        lwords.append(l[i])
+        s="A"+str(j)
+        sheet[s]=l[i]
+        j=j+1
+        workbook.save(filename="OUTPUT.xlsx")
+    j=2
+    # %%
+    j=2
+    for i in range(len(lwords)):
+        shindi="B"+str(j)
+        spu="C"+str(j)
+        sta="D"+str(j)
+        sheet[shindi]=transwordshindi[i]
+        sheet[spu]=transwordspunjabi[i]
+        sheet[sta]=transwordstamil[i]
+        j=j+1
+        workbook.save(filename="OUTPUT.xlsx")
+    j=2
 # %%
