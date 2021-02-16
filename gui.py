@@ -4,7 +4,9 @@ from tkinter import filedialog
 from openpyxl.workbook import Workbook
 from openpyxl import load_workbook
 import main as bg
-
+import mail as m
+import os
+window = Tk()
 wb = Workbook() 
 wb = load_workbook('OUTPUT.xlsx')
 ws = wb.active
@@ -43,14 +45,15 @@ def get_d():
 def get_file_path():
     global file_path
     # Open and return file path
-    file_path= filedialog.askopenfilename(title = "Select A File", filetypes = (("type1", "*.png"), ("type2", "*.jpg")))
+    file_path= filedialog.askopenfilename(title = "Select A File", filetypes = (("type1", "*.png"), ("type2", "*.jpg"),("type3","*jpeg")))
     l1 = Label(window, text = "File path: " + file_path).pack()
 
 def submit():
     bg.background(file_path)
 
+def get_e():
+    m.bg()
 
-window = Tk()
 window.title("Image to Text")
 
 b1 = Button(window, text = "Open File", command = get_file_path).pack(side=LEFT)
@@ -59,7 +62,7 @@ bA = Button(window, text = "Words", command = get_a).pack(padx = 20,pady=10, sid
 bB = Button(window, text = "Hindi", command = get_b).pack(padx = 20,pady=10, side=LEFT)
 bC = Button(window, text = "Punjabi",command = get_c).pack(padx =20,pady=10, side=LEFT)
 bD = Button(window, text = "Tamil", command = get_d).pack(padx = 20,pady=10, side=LEFT)
-
+se = Button(window, text = "send mail", command = get_e).pack(padx = 20,pady=10, side=LEFT)
 window.mainloop()
 
 # %%

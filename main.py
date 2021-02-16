@@ -182,7 +182,7 @@ def background(filepath):
     workbook.save(filename="OUTPUT.xlsx")
 
 
-    # %%
+
     lwords=[]
     j=2
     for i in range(len(l)):
@@ -192,7 +192,7 @@ def background(filepath):
         j=j+1
         workbook.save(filename="OUTPUT.xlsx")
     j=2
-    # %%
+
     j=2
     for i in range(len(lwords)):
         shindi="B"+str(j)
@@ -204,4 +204,14 @@ def background(filepath):
         j=j+1
         workbook.save(filename="OUTPUT.xlsx")
     j=2
+
+    import pandas as pd 
+
+    read_file = pd.read_excel ("OUTPUT.xlsx") 
+    
+    read_file.to_csv ("Test.csv",  
+                    index = None, 
+                    header=True) 
+
+
 # %%
