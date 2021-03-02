@@ -70,10 +70,10 @@ def get_pdf(file_path):
     j=2
     for i in range(len(words)):
         lwords.append(words[i])
-    s="A"+str(j)
-    sheet[s]=words[i]
-    j=j+1
-    workbook.save(filename="OUTPUT_pdf.xlsx")
+        s="A"+str(j)
+        sheet[s]=words[i]
+        j=j+1
+        workbook.save(filename="OUTPUT_pdf.xlsx")
     j=2
 
     j=2
