@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 import main as bg
 import mail as m
 import os
-window = Tk()
+
 wb = Workbook() 
 wb = load_workbook('OUTPUT.xlsx')
 ws = wb.active
@@ -53,7 +53,7 @@ def submit():
 
 def get_e():
     m.bg()
-
+window = Tk()
 window.title("Image to Text")
 
 b1 = Button(window, text = "Open File", command = get_file_path).pack(side=LEFT)
@@ -63,6 +63,11 @@ bB = Button(window, text = "Hindi", command = get_b).pack(padx = 20,pady=10, sid
 bC = Button(window, text = "Punjabi",command = get_c).pack(padx =20,pady=10, side=LEFT)
 bD = Button(window, text = "Tamil", command = get_d).pack(padx = 20,pady=10, side=LEFT)
 se = Button(window, text = "send mail", command = get_e).pack(padx = 20,pady=10, side=LEFT)
+
+def refresh():
+    window.destroy()
+    exec(open("./gui.py").read())
+r = Button(window, text = "refresh", command = refresh).pack(padx = 20,pady=10, side=LEFT)
 window.mainloop()
 
 # %%

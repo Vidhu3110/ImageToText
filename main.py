@@ -22,38 +22,23 @@ def background(filepath):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     pytesseract
     #%%
-
     def get_grayscale(image):
         return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # noise removal
     def remove_noise(image):
         return cv2.medianBlur(image,5)
-
-    #thresholding
     def thresholding(image):
         return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-
-    #dilation
     def dilate(image):
         kernel = np.ones((5,5),np.uint8)
         return cv2.dilate(image, kernel, iterations = 1)
-        
-    #erosion
     def erode(image):
         kernel = np.ones((5,5),np.uint8)
         return cv2.erode(image, kernel, iterations = 1)
-
-    #opening - erosion followed by dilation
     def opening(image):
         kernel = np.ones((5,5),np.uint8)
         return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
-
-    #canny edge detection
     def canny(image):
         return cv2.Canny(image, 100, 200)
-
-    #skew correction
     def deskew(image):
         coords = np.column_stack(np.where(image > 0))
         angle = cv2.minAreaRect(coords)[-1]
@@ -66,31 +51,21 @@ def background(filepath):
         M = cv2.getRotationMatrix2D(center, angle, 1.0)
         rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
         return rotated
-
-    #template matching
     def match_template(image, template):
         return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 
+
     #%%
-    kernel_sharpening = np.array([[-1,-1,-1], 
+    def getimage(img):
+        gray = get_grayscale(img)
+        kernel_sharpening = np.array([[-1,-1,-1], 
                                 [-1, 9,-1],
                                 [-1,-1,-1]])
-    sharpened = cv2.filter2D(img, -1, kernel_sharpening)
-    # cv2.imshow('Image Sharpening', sharpened)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    #%%
-
-    gray = get_grayscale(img)
-    thresh = thresholding(gray)
-    open = opening(gray)
-    can = canny(gray)
-    ero = erode(gray)
-    # print(pytesseract.image_to_string(img))
-
+        sharpened = cv2.filter2D(img, -1, kernel_sharpening)
+        return sharpened
+    sharp = getimage(img)
 
     #%%
-
     hImg, wImg,_ = img.shape
     conf = "-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 6"
     boxes = pytesseract.image_to_data(img)
@@ -100,7 +75,7 @@ def background(filepath):
                 b = b.split()
                 if len(b)==12:
                     x,y,w,h = int(b[6]),int(b[7]),int(b[8]),int(b[9])
-                    cv2.rectangle(sharpened, (x,y), (x+w, y+h), (50, 50, 255), 2)
+                    cv2.rectangle(sharp, (x,y), (x+w, y+h), (50, 50, 255), 2)
                     hImg, wImg,_ = img.shape
     #%%
     # cv2.imshow('Image Sharpening',sharpened)
@@ -134,10 +109,6 @@ def background(filepath):
 
     var=text_processing(pytesseract.image_to_string(img))
 
-    # nltk.download('punkt')
-    # nltk.download('stopwords')
-    # nltk.download('wordnet')
-
     #%%
     data1 = pd.read_csv('words.csv')
     l = []
@@ -148,11 +119,9 @@ def background(filepath):
     #%%
     # pip install google_trans_new
 
-    from google_trans_new import google_translator  
-
+    from google_trans_new import google_translator
     transwordshindi=[]
     transwordstamil=[]
-    transwordstelugu=[]
     transwordspunjabi=[]
     translator=google_translator()
     for i in l:
