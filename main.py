@@ -12,7 +12,7 @@ def background(filepath):
     import itertools
     import nltk
     import seaborn as sns
-    from sklearn.linear_model import LogisticRegression
+
     from nltk.corpus import stopwords
     from nltk.stem.porter import PorterStemmer
     from nltk.stem import WordNetLemmatizer 
